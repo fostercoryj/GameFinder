@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Users</title>
+</head>
+<body>
+    <div class="container col-lg">
+        <div class="row container">
+            <div class="col-sm-2 text-center">
+                <a href="/dashboard">Home</a>
+            </div>
+            <div class="col-sm-2 text-center">
+                <p>New</p>
+            </div>
+            <div class="col-sm-2 text-center">
+                <a href="">Search</a>
+            </div>
+            <div class="col-sm-2 text-center"></div>
+            <div class="col-sm-2 text-center">
+                <a href="">Account</a>
+            </div>
+        </div>
+        <div class="container col-lg">
+            <form action="/add_event" method="POST">
+                <div class="form-row">    
+                    <div class="col-sm-2">
+                        <label for="title">Title of Your Game:</label>
+                    </div>    
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="title">
+                    </div>    
+                </div>
+                <div class="form-row">    
+                    <div class="col-sm-2">
+                        <label for="system">Rule System Used:</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="system">
+                    </div>
+                </div>    
+                <div class="form-row">    
+                    <div class="col-sm-2">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="description">
+                    </div>
+                </div>    
+                <div class="form-row">    
+                    <div class="col-sm-2">
+                        <label for="street">Street Address</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="street">
+                    </div>
+                </div>
+                <div class="form-row">    
+                    <div class="col-sm-2">
+                        <label for="city">City</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="city">
+                    </div>
+                </div>
+                <div class="form-row">    
+                    <div class="col-sm-2">
+                        <label for="state">State</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <select id="stateAbbr" name="stateAbbr">
+                            <option value="AR">AR</option>
+                            <option value="KS">KS</option>
+                            <option value="MO">MO</option>
+                            <option value="OK">OK</option>
+                            <option value="TX">TX</option>
+                        </select>
+                    </div>
+                </div>
+                <input type='submit' value='Submit'>
+            </form>
+        </div>   
+    </div>
+</body> 

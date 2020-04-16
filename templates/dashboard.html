@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="container col-lg">
+        <div class="row container">
+            <div class="col-sm-2 text-center">
+                <p>Home</p>
+            </div>
+            <div class="col-sm-2 text-center">
+                <a href="/new_event">New</a>
+            </div>
+            <div class="col-sm-2 text-center">
+                <a href="">Search</a>
+            </div>
+            <div class="col-sm-2 text-center"></div>
+            <div class="col-sm-2 text-center">
+                <a href="">Account</a>
+            </div>
+        </div>
+        <div class="row container">
+            <h1>Welcome {{session['fname']}} </h1>
+        </div>
+        <div class="container row">
+            <h6>Find a game to join!</h6>
+        </div>
+        <div class="row container">
+            <h4>Games Available:</h4>
+            <table class="table table-striped border">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Rule System</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {% for x in all_events %}  
+                    <tr>
+                      <th scope="row">{{ x['title'] }}</th>
+                      <td>{{ x['system'] }}</td>
+                      <td>{{ x['description'] }}</td>
+                      <td>{{ x['city'] }}, {{x['state_abbr']}}</td>
+                    </tr>  
+                  {% endfor %}  
+                </tbody>
+              </table>
+        </div>  
+    </div>
+</body>
