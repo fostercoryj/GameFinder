@@ -27,7 +27,7 @@
                         <label for="title">Title of Your Game:</label>
                     </div>    
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" name="title">
+                        <input type="text" class="form-control" name="title" placeholder="{{ edit_info[0]['title'] }}">
                     </div>    
                 </div>
                 <div class="form-row">    
@@ -35,7 +35,7 @@
                         <label for="system">Rule System Used:</label>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" name="system">
+                        <input type="text" class="form-control" name="system" placeholder="{{ edit_info[0]['system'] }}">
                     </div>
                 </div>    
                 <div class="form-row">    
@@ -43,7 +43,7 @@
                         <label for="description">Description</label>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" name="description">
+                        <input type="text" class="form-control" name="description" placeholder="{{ edit_info[0]['description'] }}">
                     </div>
                 </div>    
                 <div class="form-row">    
@@ -51,7 +51,7 @@
                         <label for="street">Street Address</label>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" name="street">
+                        <input type="text" class="form-control" name="street" placeholder=" {{ edit_info[0]['street'] }}">
                     </div>
                 </div>
                 <div class="form-row">    
@@ -59,7 +59,7 @@
                         <label for="city">City</label>
                     </div>
                     <div class="col-sm-3">
-                        <input type="text" class="form-control" name="city">
+                        <input type="text" class="form-control" name="city" placeholder="{{ edit_info[0]['city'] }}">
                     </div>
                 </div>
                 <div class="form-row">    
@@ -67,7 +67,7 @@
                         <label for="city">Date</label>
                     </div>
                     <div class="col-sm-3">
-                        <input type="date" class="form-control" name="date">
+                        <input type="date" class="form-control" name="date" placeholder="{{ edit_info[0]['date'] }}">
                     </div>
                 </div>
                 <div class="form-row">    
@@ -75,7 +75,7 @@
                         <label for="state">State</label>
                     </div>
                     <div class="col-sm-3">
-                        <select id="stateAbbr" name="stateAbbr">
+                        <select id="stateAbbr" name="stateAbbr" placeholder="{{ edit_info[0]['state_abbr'] }}">
                             <option value="AR">AR</option>
                             <option value="KS">KS</option>
                             <option value="MO">MO</option>

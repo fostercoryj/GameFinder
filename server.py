@@ -93,7 +93,7 @@ def dashboard():
     if 'id' not in session:
         session.clear()
         return redirect('/')
-    query = ("SELECT events.id, title, events.system, events.description, city, state_abbr FROM events JOIN addresses ON addresses.id = events.id;")
+    query = ("SELECT events.id, title, events.system, events.description,events.date, city, state_abbr FROM events JOIN addresses ON addresses.id = events.id;")
     data = {
         'email' : session['email']
     }
@@ -131,12 +131,12 @@ def add_event():
     }
     mysql = connectToMySQL('lfg_db')
     address_id = mysql.query_db(query,data)
-    print(address_id[0]['id'],'<--Should be a good ID')
-    query = ("INSERT INTO events (title, events.system, events.description, created_at, updated_at, events.users_id, events.addresses_id) VALUES (%(title)s,%(system)s,%(description)s,now(), now(),%(user_id)s,%(address_id)s);")
+    query = ("INSERT INTO events (title, events.system, events.description, date, created_at, updated_at, events.users_id, events.addresses_id) VALUES (%(title)s,%(system)s,%(description)s, %(date)s,now(), now(),%(user_id)s,%(address_id)s);")
     data = {
         'title' : request.form['title'],
         'system' : request.form['system'],
         'description' : request.form['description'],
+        'date' : request.form['date'],
         'user_id' : session['id'],
         'address_id' : address_id[0]['id']
     }
@@ -149,54 +149,13 @@ def my_account():
     if 'id' not in session:
         session.clear()
         return redirect('/')
-    query = ("SELECT first_name, last_name, email FROM users WHERE id = %(userid)s")
+    query = ("SELECT first_name, last_name, email, title FROM users JOIN events on users.id WHERE users.id = %(userid)s;")
     data = {
         'userid' : session['id']
     }
-    mysql = connectToMySQL('quote_dash_db')
+    mysql = connectToMySQL('lfg_db')
     user_info = mysql.query_db(query,data)
-    return render_template('my_account.html', user_info = user_info[0])
-
-@app.route('/edit_user', methods=["POST"])
-def edit_user():
-    is_valid = True
-    query = ('SELECT email FROM users')
-    mysql = connectToMySQL('quote_dash_db')
-    email_unique2 = mysql.query_db(query)
-    if session['email'] != request.form['edit_email']:   
-        for x in email_unique2:
-            if request.form['edit_email'] == x['email']:
-                is_valid = False
-                flash('Email already registered. Please use another.')
-                return redirect('/myaccount')
-    if len(request.form['edit_fname'])<1:
-        is_valid = False
-        flash("Please enter a first name.")
-    if len(request.form['edit_lname'])<1:
-        is_valid = False
-        flash('Please enter a last name.')
-    if not EMAIL_REGEX.match(request.form['edit_email']):   
-        flash("Invalid email address.")
-        is_valid = False
-    if len(request.form['edit_email'])<1:
-        is_valid = False
-        flash('Please enter an email address.')
-    if is_valid == True:
-        print('in the right query at least')
-        query1 = ("UPDATE users SET first_name = %(fname)s, last_name = %(lname)s, email = %(email)s WHERE id = %(userid)s ;")
-        data1 = {
-            'fname' : request.form['edit_fname'],
-            'lname' : request.form['edit_lname'],
-            'email' : request.form['edit_email'],
-            'userid' : session['id']
-        }
-        mysql3 = connectToMySQL('quote_dash_db')
-        mysql3.query_db(query1, data1)
-        session['fname'] = request.form['edit_fname']
-        session['lname'] = request.form['edit_lname']
-        session['email'] = request.form['edit_email']
-        return redirect('/quotes')
-    return redirect('/myaccount')
+    return render_template('users.html', user_info = user_info)
 
 @app.route('/delete_quote/<int:quote_id>')
 def delete_quote(quote_id):
@@ -211,21 +170,56 @@ def delete_quote(quote_id):
     mysql.query_db(query,data)
     return redirect('/quotes')
 
-@app.route('/user/<user_id>')
-def user(user_id):
+@app.route('/event/<int:event_id>')
+def event(event_id):
+    editable = False
     if 'id' not in session:
         session.clear()
         return redirect('/')
-    query = ('SELECT * FROM users RIGHT JOIN quotes ON users.id = users_id WHERE users.id = %(u_id)s')
+    mysql = connectToMySQL('lfg_db')
+    query = ("SELECT title,events.system, events.description, events.date,events.users_id, addresses.street,addresses.city, addresses.state_abbr FROM events JOIN addresses ON addresses.id WHERE events.id = %(event_id)s;")
     data = {
-        'u_id' : user_id
+        'event_id' : event_id
     }
-    mysql = connectToMySQL('quote_dash_db')
-    user_quotes = mysql.query_db(query,data)
-    print(user_quotes)
-    if user_quotes == ():
-        return redirect('/quotes')
-    return render_template('user.html', user_quotes = user_quotes)
+    event_info = mysql.query_db(query,data)
+    if session['id'] == event_info[0]['users_id']:
+        editable = True
+    return render_template('event.html', event_info = event_info, editable = editable)
+
+@app.route('/event/edit/<int:event_id>')
+def edit_event(event_id):
+    if 'id' not in session:
+        session.clear()
+        return redirect('/')
+    mysql = connectToMySQL('lfg_db')
+    query = ("SELECT title,events.system, events.description, events.date,events.users_id, addresses.street,addresses.city, addresses.state_abbr FROM events JOIN addresses ON addresses.id WHERE events.id = %(event_id)s;")
+    data = {
+        'event_id' : event_id
+    }
+    edit_info = mysql.query_db(query,data)
+    return render_template('edit_event.html', edit_info = edit_info)
+
+@app.route('/edit/submit/<int:wish_id>',methods=['POST'])
+def submit_edit(wish_id):
+    is_valid = True
+    if len(request.form['edit_wish']) < 3:
+        flash('Please enter a more detailed wish.')
+        is_valid = False
+    if len(request.form['edit_description']) < 3:
+        flash('Please enter a more detailed description.')
+        is_valid = False
+    if is_valid == True:
+        print('Valid updates')
+        query = ("UPDATE wishes SET wish = %(edit_wish)s, description = %(edit_description)s WHERE wishes.id = %(id)s;")
+        data = {
+            'edit_wish' : request.form['edit_wish'],
+            'edit_description' : request.form['edit_description'],
+            'id' : wish_id
+        }
+        mysql = connectToMySQL('wish_app_db')
+        submit_edit_wish = mysql.query_db(query,data)
+        return redirect('/wishes')
+    return redirect('/')
 
 @app.route('/new_event')
 def new_event():

@@ -15,12 +15,9 @@
             <div class="col-sm-2 text-center">
                 <a href="/new_event">New</a>
             </div>
+            <div class="col-sm-4 text-center"></div>
             <div class="col-sm-2 text-center">
-                <a href="">Search</a>
-            </div>
-            <div class="col-sm-2 text-center"></div>
-            <div class="col-sm-2 text-center">
-                <a href="">Account</a>
+                <a href="/myaccount">Account</a>
             </div>
         </div>
         <div class="row container">
@@ -37,20 +34,22 @@
                         <th scope="col">Title</th>
                         <th scope="col">Rule System</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Location</th>
                     </tr>
                 </thead>
                 <tbody>
                   {% for x in all_events %}  
                     <tr>
-                      <th scope="row">{{ x['title'] }}</th>
+                      <th scope="row"><a href="/event/{{x['id']}}">{{ x['title'] }}</a></th>
                       <td>{{ x['system'] }}</td>
                       <td>{{ x['description'] }}</td>
-                      <td>{{ x['city'] }}, {{x['state_abbr']}}</td>
+                      <td>{{ x['date'] }}</td>
+                      <td>{{ x['city'] }}, {{ x['state_abbr'] }}</td>
                     </tr>  
                   {% endfor %}  
                 </tbody>
-              </table>
+            </table>
         </div>  
     </div>
 </body>

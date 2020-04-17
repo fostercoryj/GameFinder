@@ -10,29 +10,36 @@
     <div class="container col-lg">
         <div class="row container">
             <div class="col-sm-2 text-center">
-                <a href="home">Home</a>
+                <a href="/dashboard">Home</a>
             </div>
             <div class="col-sm-2 text-center">
                 <a href="">New</a>
             </div>
+            <div class="col-sm-4 text-center"></div>
             <div class="col-sm-2 text-center">
-                <a href="">Search</a>
-            </div>
-            <div class="col-sm-2 text-center"></div>
-            <div class="col-sm-2 text-center">
-                <a href="">Account</a>
+                <a href="/myaccount">Account</a>
             </div>
         </div>
         <div class="row container">
-            <div class="col">
-                <p>some kind of menu for event info and users</p>
+            <div class="container">
+                <h4>Event Details</h4>
+            </div>
+            <div class="container col">
+                <p>Event Title: {{ event_info[0]['title'] }}</p>
+                <p>Rule System: {{ event_info[0]['system'] }}</p>
+                <p>Description: {{ event_info[0]['description'] }}</p>
+                <p>Date: {{ event_info[0]['date'] }}</p>
+                <p>Address: {{ event_info[0]['street'] }} {{ event_info[0]['city'] }}, {{ event_info[0]['state_abbr'] }}</p>
+                {%if editable%}
+                    <a href="/event/edit/">Edit</a>
+                {%endif%}
             </div>
             <div class="col">
                 <p>Google MAPS API if time</p>
             </div>
         </div>
         <div class="row container">
-            <p>Messages</p>
+            <p>Messages if time. </p>
         </div>
     </div>
 </body>
