@@ -8,6 +8,15 @@
 </head>
 <body>
     <div class="container col-lg">
+        <div class="container row">
+            {% with messages = get_flashed_messages() %}    
+                {% if messages %}                           
+                    {% for message in messages %}            
+                        <p>{{message}}</p>                
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
         <div class="row container">
             <div class="col-sm-2 text-center">
                 <a href="/dashboard">Home</a>
@@ -31,7 +40,7 @@
                 <p>Date: {{ event_info[0]['date'] }}</p>
                 <p>Address: {{ event_info[0]['street'] }} {{ event_info[0]['city'] }}, {{ event_info[0]['state_abbr'] }}</p>
                 {%if editable%}
-                    <a href="/event/edit/">Edit</a>
+                    <a href="/event/edit">Edit</a>
                 {%endif%}
             </div>
             <div class="col">

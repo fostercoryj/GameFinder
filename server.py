@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, flash, session
 from flask_bcrypt import Bcrypt
 from mysqlconnection import connectToMySQL
 import re
+import config
 app = Flask(__name__)
 app.secret_key = "lfgbutfortulsa"
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
@@ -182,44 +183,61 @@ def event(event_id):
         'event_id' : event_id
     }
     event_info = mysql.query_db(query,data)
+    session['event_id'] = event_id
     if session['id'] == event_info[0]['users_id']:
         editable = True
+    print(config.configfiletest)
+    flash(config.configfiletest)
     return render_template('event.html', event_info = event_info, editable = editable)
 
-@app.route('/event/edit/<int:event_id>')
-def edit_event(event_id):
+@app.route('/event/edit')
+def edit_event():
     if 'id' not in session:
         session.clear()
         return redirect('/')
     mysql = connectToMySQL('lfg_db')
     query = ("SELECT title,events.system, events.description, events.date,events.users_id, addresses.street,addresses.city, addresses.state_abbr FROM events JOIN addresses ON addresses.id WHERE events.id = %(event_id)s;")
     data = {
-        'event_id' : event_id
+        'event_id' : session['event_id']
     }
     edit_info = mysql.query_db(query,data)
     return render_template('edit_event.html', edit_info = edit_info)
 
-@app.route('/edit/submit/<int:wish_id>',methods=['POST'])
-def submit_edit(wish_id):
-    is_valid = True
-    if len(request.form['edit_wish']) < 3:
-        flash('Please enter a more detailed wish.')
-        is_valid = False
-    if len(request.form['edit_description']) < 3:
-        flash('Please enter a more detailed description.')
-        is_valid = False
-    if is_valid == True:
-        print('Valid updates')
-        query = ("UPDATE wishes SET wish = %(edit_wish)s, description = %(edit_description)s WHERE wishes.id = %(id)s;")
-        data = {
-            'edit_wish' : request.form['edit_wish'],
-            'edit_description' : request.form['edit_description'],
-            'id' : wish_id
-        }
-        mysql = connectToMySQL('wish_app_db')
-        submit_edit_wish = mysql.query_db(query,data)
-        return redirect('/wishes')
-    return redirect('/')
+@app.route('/edit/submit',methods=['POST'])
+def submit_edit():
+    if len(request.form['title']) < 2:
+        flash('Please enter a longer title.')
+        return redirect('/event/edit')
+    if len(request.form['system']) < 2:
+        flash('Please enter a longer rule system name.')
+        return redirect('/event/edit')
+    if len(request.form['description']) < 2:
+        flash('Please tell us more about it.')
+        return redirect('/event/edit')
+    if len(request.form['street']) < 2:
+        flash('Please be specific about where.')
+        return redirect('/event/edit')   
+    print('Valid updates')
+    query = ("UPDATE addresses SET street=%(street)s, city=%(city)s, state_abbr=%(state)s, updated_at=now() WHERE addresses.id=%(event_id)s;")
+    data = {
+        'street' : request.form['street'],
+        'city' : request.form['city'],
+        'state' : request.form['stateAbbr'],
+        'event_id' : session['event_id']
+    }
+    mysql = connectToMySQL('lfg_db')
+    edit_address = mysql.query_db(query,data)
+    query = ("UPDATE events SET events.title=%(title)s, events.system=%(system)s, events.description=%(description)s, events.date=%(date)s, events.updated_at=now() WHERE events.id = %(event_id)s;")
+    data = {
+        'title' : request.form['title'],
+        'system' : request.form['system'],
+        'description' : request.form['description'],
+        'date' : request.form['date'],
+        'event_id' : session['event_id']
+    }
+    mysql = connectToMySQL('lfg_db')
+    new_event = mysql.query_db(query,data)
+    return redirect('/dashboard')
 
 @app.route('/new_event')
 def new_event():
