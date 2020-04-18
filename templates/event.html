@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Event</title>
+    <style>
+        #map {
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="container col-lg">
@@ -22,7 +28,7 @@
                 <a href="/dashboard">Home</a>
             </div>
             <div class="col-sm-2 text-center">
-                <a href="">New</a>
+                <a href="/new_event">New</a>
             </div>
             <div class="col-sm-4 text-center"></div>
             <div class="col-sm-2 text-center">
@@ -43,12 +49,13 @@
                     <a href="/event/edit">Edit</a>
                 {%endif%}
             </div>
-            <div class="col">
-                <p>Google MAPS API if time</p>
+            <div class="container col">
+
+                <iframe width="600" height="450" frameborder="0" style="border:0"
+                src="https://www.google.com/maps/embed/v1/search?q={{event_info[0]['street']}},{{ event_info[0]['city'] }}+,+{{ event_info[0]['state_abbr'] }},+USA&key={{shhstring}}" allowfullscreen></iframe>
             </div>
         </div>
         <div class="row container">
-            <p>Messages if time. </p>
         </div>
     </div>
 </body>

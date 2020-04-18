@@ -178,7 +178,7 @@ def event(event_id):
         session.clear()
         return redirect('/')
     mysql = connectToMySQL('lfg_db')
-    query = ("SELECT title,events.system, events.description, events.date,events.users_id, addresses.street,addresses.city, addresses.state_abbr FROM events JOIN addresses ON addresses.id WHERE events.id = %(event_id)s;")
+    query = ("SELECT street, city, state_abbr, events.title, events.system, events.description, events.date, events.id, addresses.id,first_name, last_name,users_id FROM addresses JOIN events ON addresses_id = addresses.id JOIN users on users.id = events.users_id WHERE events.id = %(event_id)s;")
     data = {
         'event_id' : event_id
     }
@@ -186,9 +186,7 @@ def event(event_id):
     session['event_id'] = event_id
     if session['id'] == event_info[0]['users_id']:
         editable = True
-    print(config.configfiletest)
-    flash(config.configfiletest)
-    return render_template('event.html', event_info = event_info, editable = editable)
+    return render_template('event.html', event_info = event_info, editable = editable, shhstring = config.shhstring)
 
 @app.route('/event/edit')
 def edit_event():
@@ -196,7 +194,7 @@ def edit_event():
         session.clear()
         return redirect('/')
     mysql = connectToMySQL('lfg_db')
-    query = ("SELECT title,events.system, events.description, events.date,events.users_id, addresses.street,addresses.city, addresses.state_abbr FROM events JOIN addresses ON addresses.id WHERE events.id = %(event_id)s;")
+    query = ("SELECT street, city, state_abbr, events.title, events.system, events.description, events.date, events.id, addresses.id,first_name, last_name,users_id FROM addresses JOIN events ON addresses_id = addresses.id JOIN users on users.id = events.users_id WHERE events.id = %(event_id)s;")
     data = {
         'event_id' : session['event_id']
     }
