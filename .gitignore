@@ -1,2 +1,5 @@
 #stuff to hide#
 config.py
+__pycache__
+config.cpython-36
+mysqlconnection.cpython-36
