@@ -1,5 +1,4 @@
 #stuff you need to do stuff#
-python 3.1.something
+python 3.1.6
 flask 1.1.1
-i dunno
-prolly jquery
+
